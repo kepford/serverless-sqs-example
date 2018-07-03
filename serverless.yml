@@ -1,0 +1,50 @@
+service: user-tracking
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: ${opt:stage, 'dev'}
+  region: us-west-1
+  profile: default
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+      Resource:
+        Fn::GetAtt: [ viewQueue, Arn ]
+    - Effect: Allow
+      Action:
+        - sqs:DeleteMessage
+        - sqs:ReceiveMessage
+      Resource:
+        Fn::GetAtt: [ viewQueue, Arn ]
+  environment:
+    REGION: ${self:provider.region}
+    STAGE: ${self:provider.stage}
+    sqs_url:
+      Ref: viewQueue
+package:
+  include:
+    - functions/**
+    - config/**
+functions:
+  logView:
+    handler: functions/logView.logView
+    events:
+      - http:
+          path: view
+          method: post
+  logConsume:
+    timeout: 25
+    handler: functions/logConsume.logConsume
+    events:
+      - http:
+          path: consume
+          method: get
+resources:
+  Resources:
+    viewQueue:
+      Type: AWS::SQS::Queue

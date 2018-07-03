@@ -1,0 +1,22 @@
+{
+  "name": "serverless-sqs-example",
+  "version": "1.0.0",
+  "main": "handler.js",
+  "scripts": {
+    "serverless": "serverless",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "sqs-consumer": "^3.8.0",
+    "sqs-producer": "^1.6.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "serverless": "^1.27.3",
+    "serverless-offline": "^3.25.4"
+  },
+  "description": "Demonstrates creating a SQS queue and lambda function to manage it."
+}
